@@ -1,0 +1,13 @@
+:root {
+  --primary: #667eea;
+  --secondary: #764ba2;
+  --positive: #48bb78;
+  --neutral: #4299e1;
+  --negative: #f56565;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
