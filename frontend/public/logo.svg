@@ -1,36 +1,38 @@
-<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="tealGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4db8b8;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2d9999;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#5dd5d5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3db8b8;stop-opacity:1" />
     </linearGradient>
   </defs>
   
   <!-- Main circular orbit -->
-  <circle cx="100" cy="80" r="45" fill="none" stroke="#0066b3" stroke-width="6"/>
+  <circle cx="200" cy="200" r="90" fill="none" stroke="#0066cc" stroke-width="10"/>
   
-  <!-- Connection nodes (circles at orbit points) -->
-  <circle cx="55" cy="80" r="8" fill="#0066b3"/>
-  <circle cx="145" cy="80" r="8" fill="#0066b3"/>
-  <circle cx="100" cy="35" r="8" fill="#0066b3"/>
+  <!-- Connection nodes (circles at cardinal points) -->
+  <circle cx="200" cy="110" r="14" fill="#0066cc"/>
+  <circle cx="290" cy="200" r="14" fill="#0066cc"/>
+  <circle cx="200" cy="290" r="14" fill="#0066cc"/>
+  <circle cx="110" cy="200" r="14" fill="#0066cc"/>
   
-  <!-- Arrow going through -->
-  <line x1="40" y1="95" x2="160" y2="65" stroke="#0066b3" stroke-width="6" stroke-linecap="round"/>
-  <polygon points="160,65 150,70 155,60" fill="#0066b3"/>
+  <!-- Diagonal arrow going through -->
+  <line x1="140" y1="260" x2="260" y2="140" stroke="#0066cc" stroke-width="12" stroke-linecap="round"/>
+  <!-- Arrow head -->
+  <polygon points="260,140 245,150 252,132" fill="#0066cc"/>
   
-  <!-- Center diamond/nexus shape -->
-  <path d="M 100 55 L 120 80 L 100 105 L 80 80 Z" fill="url(#tealGradient)" stroke="#0066b3" stroke-width="2"/>
+  <!-- Center diamond/nexus shape (larger) -->
+  <path d="M 200 160 L 240 200 L 200 240 L 160 200 Z" fill="url(#tealGradient)" stroke="#0066cc" stroke-width="4"/>
   
   <!-- Inner diamond detail -->
-  <path d="M 100 65 L 110 80 L 100 95 L 90 80 Z" fill="#5dd5d5" opacity="0.8"/>
+  <path d="M 200 175 L 225 200 L 200 225 L 175 200 Z" fill="#5dd5d5" opacity="0.9"/>
   
   <!-- Small triangle accent inside -->
-  <path d="M 100 75 L 105 82 L 95 82 Z" fill="white" opacity="0.9"/>
+  <path d="M 200 190 L 210 202 L 190 202 Z" fill="white" opacity="0.95"/>
   
-  <!-- Bottom heart/shield shape -->
-  <path d="M 100 110 L 85 125 L 85 145 L 100 160 L 115 145 L 115 125 Z" fill="#0066b3"/>
-  <path d="M 100 115 L 90 127 L 90 142 L 100 153 L 110 142 L 110 127 Z" fill="url(#tealGradient)"/>
+  <!-- Bottom shield/heart shape (larger) -->
+  <path d="M 200 250 L 170 275 L 170 310 L 200 335 L 230 310 L 230 275 Z" fill="#0066cc"/>
+  <path d="M 200 258 L 178 278 L 178 305 L 200 325 L 222 305 L 222 278 Z" fill="url(#tealGradient)"/>
   
-  <!-- Small accent in heart -->
-  <path d="M 100 130 L 95 135 L 100 145 L 105 135 Z" fill="#5dd5d5" opacity="0.8"/>
+  <!-- Small accent in shield -->
+  <path d="M 200 280 L 190 290 L 200 310 L 210 290 Z" fill="#5dd5d5" opacity="0.8"/>
 </svg>
