@@ -11,7 +11,7 @@ const Header = ({ onRefresh, lastUpdated }) => {
     <header className="header">
       <div className="header-content">
         <div className="logo-section">
-          <img src="/logo.png" alt="NewsNexus" className="logo" />
+          <img src="/logo.svg" alt="NewsNexus" className="logo" />
           <h1>NewsNexus</h1>
         </div>
         
