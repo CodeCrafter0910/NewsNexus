@@ -67,15 +67,12 @@ Then go to http://localhost:5173 in your browser and it should be working.
 
 ## Deployment
 
-To deploy this app to production, check out the **DEPLOYMENT_GUIDE.md** file for detailed instructions.
+The app is deployed and running live at:
+- **Frontend**: https://newsnexus-mehb.onrender.com
+- **Backend API**: https://newsnexus-api.onrender.com
+- **API Docs**: https://newsnexus-api.onrender.com/api-docs
 
-**Quick Fix**: If you're getting "Couldn't load the news" error on your deployed app, see **QUICK_FIX.md** for the solution.
-
-### Key Points for Deployment:
-1. Set `VITE_API_URL` in frontend environment variables to your deployed backend URL
-2. Set `FRONTEND_URL` in backend environment variables to your deployed frontend URL
-3. Both services need the same `API_SECRET_KEY`
-4. Use production environment variables in your hosting platform
+Both services are hosted on Render. The backend automatically fetches fresh news every 2 hours and the frontend connects to it to display everything.
 
 ## API stuff
 
@@ -111,9 +108,23 @@ When the server starts it immediately fetches news from all the sources. After t
 
 The frontend just calls the backend API and displays everything. You can filter by topic or sentiment using the buttons at the top.
 
-## Testing
+## Testing the API
 
-I included a Postman collection file (POSTMAN_COLLECTION.json) that has all the requests ready to go. Or you can open http://localhost:5001/api-docs for the Swagger UI.
+If you want to test the API, I set up Swagger documentation that makes it really easy. Just go to https://newsnexus-api.onrender.com/api-docs and youll see all the endpoints listed there.
+
+Most of the routes need authentication to work. Heres how to test them:
+
+1. Open the Swagger page
+2. Click the green "Authorize" button at the top
+3. Type in the API key: `NewsNexus2024SecureKey`
+4. Hit Authorize and close the popup
+5. Now you can click on any endpoint and hit "Try it out" to test it
+
+For the topic endpoint you need to enter a topic name like `technology`, `politics`, `sports`, `business`, `health`, `science`, or `entertainment`.
+
+The health check endpoint doesnt need any auth so you can test that one right away.
+
+I also included a Postman collection file (POSTMAN_COLLECTION.json) if you prefer using that. Just import it into Postman and all the requests are already set up with the right headers.
 
 ## Some things to know
 
