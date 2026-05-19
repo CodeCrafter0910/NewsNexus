@@ -1,7 +1,7 @@
 {
   "name": "newsnexus-frontend",
   "version": "1.0.0",
-  "description": "NewsNexus frontend application",
+  "description": "Frontend for NewsNexus",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -5,120 +5,178 @@ const clusterService = require('./clusterService');
 const sentimentService = require('./sentimentService');
 
 const parser = new Parser();
-let newsCache = {
+let cached = {
   articles: [],
   clusters: [],
   lastUpdated: null
 };
 
-const fetchFromNewsAPI = async () => {
+const grabFromNewsAPI = async () => {
   try {
-    const response = await axios.get('https://newsapi.org/v2/top-headlines', {
-      params: {
-        country: 'us',
-        pageSize: 50,
-        apiKey: process.env.NEWS_API_KEY
+    const cats = ['technology', 'business', 'sports', 'health', 'science', 'entertainment'];
+    const all = [];
+
+    for (const cat of cats) {
+      try {
+        const resp = await axios.get('https://newsapi.org/v2/top-headlines', {
+          params: {
+            country: 'us',
+            category: cat,
+            pageSize: 15,
+            apiKey: process.env.NEWS_API_KEY
+          }
+        });
+
+        const mapped = resp.data.articles.map(a => ({
+          title: a.title,
+          description: a.description || '',
+          url: a.url,
+          source: a.source.name,
+          publishedAt: a.publishedAt,
+          image: a.urlToImage,
+          content: a.content || a.description || '',
+          category: cat
+        }));
+
+        all.push(...mapped);
+      } catch (err) {
+        console.error(`NewsAPI error for ${cat}:`, err.message);
       }
-    });
-    
-    return response.data.articles.map(article => ({
-      title: article.title,
-      description: article.description || '',
-      url: article.url,
-      source: article.source.name,
-      publishedAt: article.publishedAt,
-      image: article.urlToImage,
-      content: article.content || article.description || ''
-    }));
-  } catch (error) {
-    console.error('NewsAPI fetch error:', error.message);
+    }
+
+    try {
+      const genResp = await axios.get('https://newsapi.org/v2/top-headlines', {
+        params: {
+          country: 'us',
+          pageSize: 30,
+          apiKey: process.env.NEWS_API_KEY
+        }
+      });
+
+      const genArticles = genResp.data.articles.map(a => ({
+        title: a.title,
+        description: a.description || '',
+        url: a.url,
+        source: a.source.name,
+        publishedAt: a.publishedAt,
+        image: a.urlToImage,
+        content: a.content || a.description || '',
+        category: 'general'
+      }));
+
+      all.push(...genArticles);
+    } catch (err) {
+      console.error('General headlines error:', err.message);
+    }
+
+    return all;
+  } catch (err) {
+    console.error('NewsAPI totally failed:', err.message);
     return [];
   }
 };
 
-const fetchFromRSS = async () => {
-  const feeds = [
+const grabFromRSS = async () => {
+  const feedUrls = [
     'http://rss.cnn.com/rss/cnn_topstories.rss',
-    'http://feeds.bbci.co.uk/news/rss.xml'
+    'http://feeds.bbci.co.uk/news/rss.xml',
+    'http://rss.cnn.com/rss/cnn_tech.rss',
+    'http://rss.cnn.com/rss/cnn_health.rss',
+    'http://rss.cnn.com/rss/cnn_world.rss',
+    'http://rss.cnn.com/rss/cnn_us.rss',
+    'http://rss.cnn.com/rss/cnn_allpolitics.rss',
+    'http://feeds.bbci.co.uk/news/technology/rss.xml',
+    'http://feeds.bbci.co.uk/news/health/rss.xml',
+    'http://feeds.bbci.co.uk/news/business/rss.xml',
+    'http://feeds.bbci.co.uk/news/politics/rss.xml',
+    'http://feeds.bbci.co.uk/news/world/rss.xml'
   ];
-  
-  let articles = [];
-  
-  for (const feedUrl of feeds) {
+
+  let results = [];
+
+  for (const url of feedUrls) {
     try {
-      const feed = await parser.parseURL(feedUrl);
-      const feedArticles = feed.items.map(item => ({
+      const feed = await parser.parseURL(url);
+      const items = feed.items.slice(0, 15).map(item => ({
         title: item.title,
-        description: item.contentSnippet || item.content || '',
+        description: item.contentSnippet || item.content || item.summary || '',
         url: item.link,
         source: feed.title,
-        publishedAt: item.pubDate,
+        publishedAt: item.pubDate || item.isoDate,
         image: item.enclosure?.url || null,
-        content: item.contentSnippet || item.content || ''
+        content: item.contentSnippet || item.content || item.summary || ''
       }));
-      articles = articles.concat(feedArticles);
-    } catch (error) {
-      console.error(`RSS fetch error for ${feedUrl}:`, error.message);
+      results = results.concat(items);
+    } catch (err) {
+      console.error(`RSS failed for ${url}:`, err.message);
     }
   }
-  
-  return articles;
+
+  return results;
 };
 
 const fetchAndProcessNews = async () => {
   try {
-    const [newsApiArticles, rssArticles] = await Promise.all([
-      fetchFromNewsAPI(),
-      fetchFromRSS()
+    const [apiNews, rssNews] = await Promise.all([
+      grabFromNewsAPI(),
+      grabFromRSS()
     ]);
-    
-    let allArticles = [...newsApiArticles, ...rssArticles];
-    allArticles = allArticles.filter(a => a.title && a.url);
-    
-    const processedArticles = await Promise.all(
-      allArticles.map(async (article) => {
+
+    let everything = [...apiNews, ...rssNews];
+    everything = everything.filter(a => a.title && a.url);
+
+    const processed = await Promise.all(
+      everything.map(async (article) => {
         const summary = await summaryService.generateSummary(article);
         const sentiment = sentimentService.analyzeSentiment(article.content || article.description);
-        
+        const topic = clusterService.extractTopicForArticle(article);
+
         return {
           ...article,
           summary,
-          sentiment
+          sentiment,
+          topic
         };
       })
     );
-    
-    const clusters = clusterService.clusterArticles(processedArticles);
-    
-    newsCache = {
-      articles: processedArticles,
+
+    const clusters = clusterService.clusterArticles(processed);
+
+    const topicCount = {};
+    processed.forEach(a => {
+      const t = a.topic || 'General';
+      topicCount[t] = (topicCount[t] || 0) + 1;
+    });
+    console.log('Topics:', topicCount);
+    console.log('Total articles:', processed.length);
+
+    cached = {
+      articles: processed,
       clusters,
       lastUpdated: new Date().toISOString()
     };
-    
-    return newsCache;
-  } catch (error) {
-    console.error('Error processing news:', error.message);
-    throw error;
+
+    return cached;
+  } catch (err) {
+    console.error('Processing failed:', err.message);
+    throw err;
   }
 };
 
 const getDigest = () => {
-  return newsCache;
+  return cached;
 };
 
 const getTopicNews = (topicName) => {
-  const topic = topicName.toLowerCase();
-  const filtered = newsCache.articles.filter(article => {
-    const searchText = `${article.title} ${article.description}`.toLowerCase();
-    return searchText.includes(topic);
+  const matched = cached.articles.filter(a => {
+    return a.topic && a.topic.toLowerCase() === topicName.toLowerCase();
   });
-  
+
   return {
     topic: topicName,
-    articles: filtered,
-    count: filtered.length,
-    lastUpdated: newsCache.lastUpdated
+    articles: matched,
+    count: matched.length,
+    lastUpdated: cached.lastUpdated
   };
 };
 

@@ -4,11 +4,11 @@ const newsService = require('../services/newsService');
 
 router.get('/:name', (req, res) => {
   try {
-    const topicName = req.params.name;
-    const topicNews = newsService.getTopicNews(topicName);
-    res.json(topicNews);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve topic news' });
+    const name = req.params.name;
+    const result = newsService.getTopicNews(name);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Couldnt get topic news' });
   }
 });
 

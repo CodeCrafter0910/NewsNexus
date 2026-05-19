@@ -1,25 +1,23 @@
 openapi: 3.0.0
 info:
   title: NewsNexus API
-  description: Multi-source news aggregation and digest API
+  description: API for the news aggregation app
   version: 1.0.0
-  contact:
-    name: NewsNexus Team
 servers:
   - url: http://localhost:5000/api
-    description: Development server
+    description: Local dev server
 security:
   - ApiKeyAuth: []
 paths:
   /digest:
     get:
-      summary: Get complete news digest
-      description: Returns all clustered news articles with summaries and sentiment
+      summary: Get the news digest
+      description: Returns all the articles with their summaries and sentiment
       tags:
         - Digest
       responses:
         '200':
-          description: Successful response
+          description: Got the news
           content:
             application/json:
               schema:
@@ -37,13 +35,13 @@ paths:
                     type: string
                     format: date-time
         '401':
-          description: Unauthorized - API key missing
+          description: No API key provided
         '403':
-          description: Forbidden - Invalid API key
+          description: Wrong API key
   /topic/{name}:
     get:
-      summary: Get news by topic
-      description: Returns articles filtered by specific topic
+      summary: Get news for a topic
+      description: Returns articles for a specific topic
       tags:
         - Topics
       parameters:
@@ -52,10 +50,10 @@ paths:
           required: true
           schema:
             type: string
-          description: Topic name to filter by
+          description: Which topic you want
       responses:
         '200':
-          description: Successful response
+          description: Got the topic news
           content:
             application/json:
               schema:
@@ -73,19 +71,19 @@ paths:
                     type: string
                     format: date-time
         '401':
-          description: Unauthorized
+          description: No API key
         '403':
-          description: Forbidden
+          description: Bad API key
   /health:
     get:
-      summary: Health check endpoint
-      description: Check API status
+      summary: Health check
+      description: See if the API is running
       tags:
         - Health
       security: []
       responses:
         '200':
-          description: API is healthy
+          description: Its running
           content:
             application/json:
               schema:

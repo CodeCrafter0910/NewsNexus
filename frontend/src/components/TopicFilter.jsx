@@ -2,35 +2,35 @@ import './TopicFilter.css';
 
 const TopicFilter = ({ onTopicSelect, selectedTopic, sentimentFilter, onSentimentChange }) => {
   const topics = ['all', 'technology', 'politics', 'sports', 'business', 'health', 'science'];
-  const sentiments = ['all', 'positive', 'neutral', 'negative'];
+  const moods = ['all', 'positive', 'neutral', 'negative'];
 
   return (
     <div className="topic-filter">
       <div className="filter-section">
         <label>Topics:</label>
         <div className="filter-buttons">
-          {topics.map(topic => (
+          {topics.map(t => (
             <button
-              key={topic}
-              className={`filter-btn ${selectedTopic === topic || (!selectedTopic && topic === 'all') ? 'active' : ''}`}
-              onClick={() => onTopicSelect(topic)}
+              key={t}
+              className={`filter-btn ${selectedTopic === t || (!selectedTopic && t === 'all') ? 'active' : ''}`}
+              onClick={() => onTopicSelect(t)}
             >
-              {topic}
+              {t}
             </button>
           ))}
         </div>
       </div>
-      
+
       <div className="filter-section">
         <label>Sentiment:</label>
         <div className="filter-buttons">
-          {sentiments.map(sentiment => (
+          {moods.map(m => (
             <button
-              key={sentiment}
-              className={`filter-btn sentiment-${sentiment} ${sentimentFilter === sentiment ? 'active' : ''}`}
-              onClick={() => onSentimentChange(sentiment)}
+              key={m}
+              className={`filter-btn sentiment-${m} ${sentimentFilter === m ? 'active' : ''}`}
+              onClick={() => onSentimentChange(m)}
             >
-              {sentiment}
+              {m}
             </button>
           ))}
         </div>

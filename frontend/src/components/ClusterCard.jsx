@@ -8,10 +8,10 @@ const ClusterCard = ({ cluster }) => {
         <h2>{cluster.topic}</h2>
         <span className="article-count">{cluster.articles.length} articles</span>
       </div>
-      
+
       <div className="articles-list">
-        {cluster.articles.map((article, idx) => (
-          <ArticleCard key={idx} article={article} />
+        {cluster.articles.map((article, i) => (
+          <ArticleCard key={i} article={article} />
         ))}
       </div>
     </div>

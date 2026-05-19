@@ -1,13 +1,16 @@
 {
   "name": "newsnexus-backend",
   "version": "1.0.0",
-  "description": "Multi-source news aggregation API",
+  "description": "Backend for the NewsNexus news app",
   "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["news", "api", "aggregation"],
+  "keywords": ["news", "api"],
   "author": "",
   "license": "MIT",
   "dependencies": {

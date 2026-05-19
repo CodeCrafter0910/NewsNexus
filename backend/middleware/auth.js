@@ -1,14 +1,14 @@
 const authenticate = (req, res, next) => {
-  const apiKey = req.headers['x-api-key'];
-  
-  if (!apiKey) {
-    return res.status(401).json({ error: 'API key required' });
+  const key = req.headers['x-api-key'];
+
+  if (!key) {
+    return res.status(401).json({ error: 'You need an API key' });
   }
-  
-  if (apiKey !== process.env.API_SECRET_KEY) {
-    return res.status(403).json({ error: 'Invalid API key' });
+
+  if (key !== process.env.API_SECRET_KEY) {
+    return res.status(403).json({ error: 'Wrong API key' });
   }
-  
+
   next();
 };
 

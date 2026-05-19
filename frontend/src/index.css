@@ -1,13 +1,71 @@
 :root {
-  --primary: #667eea;
-  --secondary: #764ba2;
-  --positive: #48bb78;
-  --neutral: #4299e1;
-  --negative: #f56565;
+  --bg-primary: #0b0d13;
+  --bg-secondary: #111318;
+  --bg-card: #161820;
+  --bg-elevated: #1c1e28;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.1);
+  --text-primary: #eaeaf0;
+  --text-secondary: #9a9ab0;
+  --text-muted: #5c5c72;
+  --accent-1: #6366f1;
+  --accent-2: #818cf8;
+  --accent-3: #a5b4fc;
+  --positive: #22c55e;
+  --positive-bg: rgba(34, 197, 94, 0.1);
+  --neutral: #3b82f6;
+  --neutral-bg: rgba(59, 130, 246, 0.1);
+  --negative: #ef4444;
+  --negative-bg: rgba(239, 68, 68, 0.1);
+  --transition-fast: 0.15s ease;
+  --transition-smooth: 0.25s ease;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+::selection {
+  background: var(--accent-1);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
