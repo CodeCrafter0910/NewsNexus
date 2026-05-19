@@ -76,6 +76,31 @@ paths:
           description: No API key
         '403':
           description: Bad API key
+  /refresh:
+    post:
+      summary: Refresh news
+      description: Manually trigger a fresh news fetch from all sources
+      tags:
+        - Refresh
+      responses:
+        '200':
+          description: News refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: No API key provided
+        '403':
+          description: Wrong API key
+        '500':
+          description: Refresh failed
   /health:
     get:
       summary: Health check
