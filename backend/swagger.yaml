@@ -4,7 +4,9 @@ info:
   description: API for the news aggregation app
   version: 1.0.0
 servers:
-  - url: http://localhost:5000/api
+  - url: https://newsnexus-api.onrender.com/api
+    description: Production server
+  - url: http://localhost:5001/api
     description: Local dev server
 security:
   - ApiKeyAuth: []
