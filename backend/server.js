@@ -49,6 +49,16 @@ cron.schedule('0 */2 * * *', async () => {
   }
 });
 
+cron.schedule('*/14 * * * *', async () => {
+  try {
+    const axios = require('axios');
+    await axios.get('https://newsnexus-api.onrender.com/api/health');
+    console.log('Keep-alive ping sent');
+  } catch (err) {
+    console.error('Keep-alive ping failed:', err.message);
+  }
+});
+
 (async () => {
   try {
     await newsService.fetchAndProcessNews();
